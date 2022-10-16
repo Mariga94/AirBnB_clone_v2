@@ -3,6 +3,7 @@
 Starts a Flask web application
 """
 from flask import Flask, request, escape
+import re
 
 
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def index_3(text):
     """
     route to C
     """
-    return 'C {}'.format(escape(text))
+    return 'C {}'.format(escape(re.sub("_", " ", text)))
 
 
 if __name__ == "__main__":
