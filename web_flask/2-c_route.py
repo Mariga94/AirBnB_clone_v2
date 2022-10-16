@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+"""
+Starts a Flask web application
+"""
+from flask import Flask, request, escape
+
+
+app = Flask(__name__)
+
+
+@app.route('/', strict_slashes=False)
+def index():
+    """
+    route to home
+    """
+    return 'Hello HBNB!'
+
+
+@app.route('/hbnb', strict_slashes=False)
+def index2():
+    """
+    route to HBNB
+    """
+    return "HBNB"
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def index_3(text):
+    """
+    route to C
+    """
+    return 'C {}'.format(escape(text))
+
+
+if __name__ == "__main__":
+    run(host='0.0.0.0', port=5000)
