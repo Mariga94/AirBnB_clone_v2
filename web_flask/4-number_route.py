@@ -33,7 +33,7 @@ def index_3(text):
     return 'C {}'.format(escape(re.sub("_", " ", text)))
 
 
-@app.route('/python', defaults={'text': 'is cool'})
+@app.route('/python', defaults={'text': 'is cool'}, strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def index_4(text):
     """
