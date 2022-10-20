@@ -61,7 +61,7 @@ def index_6(n):
 @app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def index_7(n):
     """
-    route 7
+    Display odd or even
     """
 
     return render_template('6-number_odd_or_even.html', n=n)
