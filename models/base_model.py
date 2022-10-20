@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-"""This module defines a base class for all models in our hbnb clone"""
+
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
@@ -60,10 +59,7 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        try:
-            dictionary.pop('_sa_instance_state')
-        except KeyError:
-            pass
+        dictionary.pop("_sa_instance_state", None)
         return dictionary
 
     def delete(self):
