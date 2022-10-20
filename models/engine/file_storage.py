@@ -66,3 +66,9 @@ class FileStorage:
                                                      obj.id)]
         except KeyError:
             pass
+
+    def close(self):
+        """
+        Deserializing the JSON file to objects
+        """
+        self.reload()
