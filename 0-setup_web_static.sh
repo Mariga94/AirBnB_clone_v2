@@ -4,15 +4,16 @@
 apt-get update
 apt-get install -y nginx
 
-mkdir /data/web_static/releases/
-mkdir /data/web_static/shared/
-mkdir /data/web_static/releases/test/
+mkdir -p /data/web_static/
+mkdir -p /data/web_static/releases/
+mkdir -p /data/web_static/shared/
+mkdir -p /data/web_static/releases/test/
 
 echo "Hello World!" > /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 chown -R ubuntu /data/
-chgrp -R ubuntu/data/
+chgrp -R ubuntu /data/
 
 printf %s "server {
     listen 80 default_server;
@@ -22,7 +23,7 @@ printf %s "server {
     index index.html index.html;
 
     location /hbnb_static {
-      alias /data/web_statuc/current;
+      alias /data/web_static/current;
       index index.html index.htm;
     }
 
