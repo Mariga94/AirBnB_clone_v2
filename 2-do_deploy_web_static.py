@@ -10,6 +10,9 @@ env.hosts = ["18.207.224.145", "3.83.32.25"]
 
 def do_deploy(archive_path):
     """
+    Distriubutes an archive to your web servers
+    Arguments:
+      archive_path(file): file path to the .tgz file
     """
     if os.path.isfile(archive_path) is False:
         return False
