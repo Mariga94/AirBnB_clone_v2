@@ -6,6 +6,9 @@ from fabric.api import local
 
 
 def do_pack():
+    """
+    generates a .tgz archive frim the contents of the web_static
+    """
     date = datetime.utcnow()
     file = "versions/web_static_{}{}{}{}{}{}.tgz".format(date.year, date.month,
                                                          date.day, date.hour,
@@ -17,4 +20,3 @@ def do_pack():
         if local("tar -cvzf {} web_static".format(file)).failed is True:
             return None
         return file
-
