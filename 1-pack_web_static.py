@@ -1,5 +1,8 @@
-#!/usr/bin/env python3
-# Fabric script that generates a .tgx archive from the contents of web_static
+#!/usr/bin/python3
+"""
+Fabric script that generates a .tgx archive from the
+contents of web_static
+"""
 import os
 from datetime import datetime
 from fabric.api import local
