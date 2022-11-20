@@ -22,7 +22,7 @@ class State(BaseModel, Base):
         cities = relationship("City", backref="state", cascade="delete")
     else:
         name = ""
-    
+
     def __init__(self, *args, **kwargs):
         """initialize state"""
         super().__init__(*args, **kwargs)
