@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+time = "%Y-%m-%dT%H:%M:%S.%f"
 
 class BaseModel:
     """A base class for all hbnb models
@@ -32,12 +33,26 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
+            """
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
             self.__dict__.update(kwargs)
+            """
+            for key, value in kwargs.items():
+                setattr(self, key, value)
+            if kwargs.get("created_at", None) and type(self.created_at) is str:
+                self.created_at = datetime.strptime(kwargs["created_at"], time)
+            else:
+                self.created_at = datetime.utcnow()
+            if kwargs.get("updated_at", None) and type(self.updated_at) is str:
+                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
+            else:
+                self.updated_at = datetime.utcnow()
+            if kwargs.get("id", None) is None:
+                self.id = str(uuid4())
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -51,8 +66,9 @@ class BaseModel:
         storage.new(self)
         storage.save()
 
-    def to_dict(self):
+    def to_dict(self, save_fs=None):
         """Convert instance into dict format"""
+        """
         dictionary = {}
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
@@ -61,6 +77,20 @@ class BaseModel:
         dictionary['updated_at'] = self.updated_at.isoformat()
         dictionary.pop("_sa_instance_state", None)
         return dictionary
+        """
+        """returns a dictionary containing all keys/values of the instance"""
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
+        new_dict["__class__"] = self.__class__.__name__
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        if save_fs is None:
+            if "password" in new_dict:
+                del new_dict["password"]
+        return new_dict
 
     def delete(self):
         """Delete instance"""
