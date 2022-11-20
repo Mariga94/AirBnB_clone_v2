@@ -16,9 +16,16 @@ class State(BaseModel, Base):
         name(String): states' name
         cities(): relationship between cities and states table
     """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="delete")
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref="state", cascade="delete")
+    else:
+        name = ""
+    
+    def __init__(self, *args, **kwargs):
+        """initialize state"""
+        super().__init__(*args, **kwargs)
 
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
@@ -26,8 +33,8 @@ class State(BaseModel, Base):
             """
             Lists all related cit objects
             """
-            cities = []
+            city_list = []
             for city in list(models.storage.all(City).values()):
                 if city.state_id == self.id:
-                    cities.append(city)
-            return cities
+                    city_list.append(city)
+            return city_list
