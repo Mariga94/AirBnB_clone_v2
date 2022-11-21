@@ -17,6 +17,9 @@ class User(BaseModel, Base):
         last_name (String): user's last_name
     """
     __tablename__ = 'users'
+    __table_args__ = (
+            {'mysql_default_charset': 'latin1'})
+
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
     first_name = Column(String(128), nullable=True)

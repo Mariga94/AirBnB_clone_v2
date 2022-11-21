@@ -10,13 +10,16 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 
-table = Table("place_amenity", Base.metadata,
-              Column("place_id", String(60),
-                     ForeignKey("places.id"),
-                     primary_key=True, nullable=False),
-              Column("amenity_id", String(60),
-                     ForeignKey("amenities.id"),
-                     primary_key=True, nullable=False))
+table = Table(
+        "place_amenity",
+        Base.metadata,
+        Column("place_id", String(60),
+               ForeignKey("places.id"),
+               primary_key=True, nullable=False),
+        Column("amenity_id", String(60),
+               ForeignKey("amenities.id"),
+               primary_key=True, nullable=False),
+        mysql_charset="latin1")
 
 
 class Place(BaseModel, Base):
@@ -36,6 +39,8 @@ class Place(BaseModel, Base):
         longitude (Float): longitude
     """
     __tablename__ = 'places'
+    __table_args__ = (
+            {'mysql_default_charset': 'latin1'})
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)
@@ -46,13 +51,13 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    amenities = relationship("Amenity", secondary="place_amenity",
+                             viewonly="False")
+    reviews = relationship("Review", backref="place", cascade='delete')
+
     amenity_ids = []
 
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        amenities = relationship("Amenity", secondary="place_amenity",
-                                 viewonly="False")
-        reviews = relationship("Review", backref="place", cascade='delete')
-    else:
+    if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def reviews(self):
             """Get reviews """
